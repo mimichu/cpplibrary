@@ -486,6 +486,13 @@ void aa2quat(const double theta, const Vector3d& n, Vector4d& q) {
   q.tail(3) = std::sin(theta / 2) * n.normalized();
 }
 
+Vector4d aa2quat(const double theta, const Vector3d& n) {
+  Vector4d q;
+  q[0] = std::cos(theta / 2);
+  q.tail(3) = std::sin(theta / 2) * n.normalized();
+  return q;
+}
+
 Matrix3d quat2SO3(const Quaterniond& q) {
   return q.normalized().toRotationMatrix();
 }
@@ -806,6 +813,22 @@ float angBTquat(const Eigen::Quaternionf& q1, const Eigen::Quaternionf& q2) {
 
 double angBTquat(const Eigen::Quaterniond& q1, const Eigen::Quaterniond& q2) {
   double dot = q1.normalized().dot(q2.normalized());
+  double cos_value = 2.0 * dot * dot - 1.0;
+  double ang;
+  if (cos_value > 0.999999)
+    ang = 0;
+  else if (cos_value < -0.999999)
+    ang = PI;
+  else
+    ang = acos(cos_value);
+  if (ang > PI) {
+    ang = 2.0 * PI - ang;
+  }
+  return fabs(ang);
+}
+
+double angBTquat(const RUT::VectorXd& q1, const RUT::VectorXd& q2) {
+  double dot = q1.tail<4>().normalized().dot(q2.tail<4>().normalized());
   double cos_value = 2.0 * dot * dot - 1.0;
   double ang;
   if (cos_value > 0.999999)

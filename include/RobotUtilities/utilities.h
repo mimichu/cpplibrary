@@ -233,6 +233,7 @@ Matrix3d aa2mat(const double theta, const Vector3d& n);
 // output:
 // q: 4x1
 void aa2quat(const double theta, const Vector3d& n, Vector4d& q);
+Vector4d aa2quat(const double theta, const Vector3d& n);
 Matrix3d quat2SO3(const Quaterniond& q);
 Matrix3d quat2SO3(double qw, double qx, double qy, double qz);
 // quaternion to axis-angle
@@ -276,6 +277,10 @@ Quaternionf QuatMTimes(const Quaternionf& q1, const Quaternionf& q2);
 Quaterniond QuatMTimes(const Quaterniond& q1, const Quaterniond& q2);
 float angBTquat(const Quaternionf& q1, const Quaternionf& q2);
 double angBTquat(const Quaterniond& q1, const Quaterniond& q2);
+/**
+ * This format assumes the last four elements of q1 and q2 are the quaternions.
+ */
+double angBTquat(const RUT::VectorXd& q1, const RUT::VectorXd& q2);
 
 /**
    * Compute the quaternion @p qm that is @p angle away from quaternion @p qa
