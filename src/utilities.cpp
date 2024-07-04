@@ -560,6 +560,20 @@ void so32quat(const Vector3d& so3, double* q) {
     q[3] = so3(2) * sin_theta;
   }
 }
+
+void SO32quat(const Matrix3d& SO3, Eigen::Ref<RUT::Vector4d> q) {
+  // Eigen implementation assumes input matrix is strictly orthogonal and is not
+  // numerically stable sometimes.
+  Quaterniond q_eigen(SO3);
+  q_eigen.normalize();
+  // convert q_eigen to a vector q
+  // Note q = q_eigen.coeffs() uses (w, x, y, z) ordering, which is not the convention we use
+  q[0] = q_eigen.w();
+  q[1] = q_eigen.x();
+  q[2] = q_eigen.y();
+  q[3] = q_eigen.z();
+}
+
 void SO32quat(const Matrix3d& SO3, double* q) {
   // Eigen implementation assumes input matrix is strictly orthogonal and is not
   // numerically stable sometimes.
@@ -682,6 +696,11 @@ Matrix6d SE32Adj(const Matrix4d& SE3) {
   Adj.topRightCorner(3, 3) =
       wedge(SE3.block<3, 1>(0, 3)) * SE3.topLeftCorner(3, 3);
   return Adj;
+}
+
+void SE32Pose(const Matrix4d& SE3, Vector7d& pose) {
+  pose.head<3>() = SE3.block<3, 1>(0, 3);
+  SO32quat(SE3.block<3, 3>(0, 0), pose.block<4, 1>(3, 0));
 }
 
 void SE32Pose(const Matrix4d& SE3, double* pose) {

@@ -6,6 +6,12 @@
 using namespace RUT;
 
 int main() {
+
+  Matrix3d SO3 = Matrix3d::Identity();
+  Eigen::Matrix<double, 7, 4> pose;
+  SO32quat(SO3, pose.block<4, 1>(0, 1));
+  std::cout << "pose: " << pose << std::endl;
+
   // Eigen::Vector3d p1, p2;
   // p1 << 0, 0, 0;
   // p2 << 1, 0, 0;
@@ -43,16 +49,16 @@ int main() {
   // "R'*R:\n" << R.transpose()*R << std::endl; std::cout << "R norm: " <<
   // R.norm() << std::endl;
 
-  std::vector<double> pose_vec1 = {0, 0, 0, 1, 0, 0, 0};
-  std::vector<double> pose_vec2 = {0.405014, -0.348191, 0.330936, -0.017058,
-                                   0.998968, -0.019972, 0.037051};
-  CartesianPose pose_WGs = CartesianPose(pose_vec1);
-  CartesianPose pose_WT = CartesianPose(pose_vec2);
-  CartesianPose pose_TGs = pose_WT.inv() * pose_WGs;
-  std::cout << "pose_WGs: " << pose_WGs.poseString() << std::endl;
-  std::cout << "pose_WT: " << pose_WT.poseString() << std::endl;
-  std::cout << "pose_WT.inv(): " << pose_WT.inv().poseString() << std::endl;
-  std::cout << "pose_TGs: " << pose_TGs.poseString() << std::endl;
+  // std::vector<double> pose_vec1 = {0, 0, 0, 1, 0, 0, 0};
+  // std::vector<double> pose_vec2 = {0.405014, -0.348191, 0.330936, -0.017058,
+  //                                  0.998968, -0.019972, 0.037051};
+  // CartesianPose pose_WGs = CartesianPose(pose_vec1);
+  // CartesianPose pose_WT = CartesianPose(pose_vec2);
+  // CartesianPose pose_TGs = pose_WT.inv() * pose_WGs;
+  // std::cout << "pose_WGs: " << pose_WGs.poseString() << std::endl;
+  // std::cout << "pose_WT: " << pose_WT.poseString() << std::endl;
+  // std::cout << "pose_WT.inv(): " << pose_WT.inv().poseString() << std::endl;
+  // std::cout << "pose_TGs: " << pose_TGs.poseString() << std::endl;
 
   // Eigen::MatrixXd A(2,5);
   // A.setRandom();
@@ -88,18 +94,18 @@ int main() {
   // std::cout << "wedge6(v)*p:\n" << wedge6(v)*p << std::endl;
   // std::cout << "wedgeRight6(p) * v:\n" << wedgeRight6(p) * v << std::endl;
 
-  RUT::Timer timer;
-  timer.set_loop_rate_hz(500.);
-  timer.start_timed_loop();
-  timer.tic();
-  int count = 0;
-  double time_old = timer.toc_ms();
-  while (count < 1000) {
-    auto time = timer.toc_ms();
-    std::cout << "time elasped: " << time - time_old << std::endl;
-    time_old = time;
-    timer.sleep_till_next();
-  }
+  // RUT::Timer timer;
+  // timer.set_loop_rate_hz(500.);
+  // timer.start_timed_loop();
+  // timer.tic();
+  // int count = 0;
+  // double time_old = timer.toc_ms();
+  // while (count < 1000) {
+  //   auto time = timer.toc_ms();
+  //   std::cout << "time elasped: " << time - time_old << std::endl;
+  //   time_old = time;
+  //   timer.sleep_till_next();
+  // }
 
   return 0;
 }
