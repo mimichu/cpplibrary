@@ -493,6 +493,11 @@ Vector4d aa2quat(const double theta, const Vector3d& n) {
   return q;
 }
 
+Matrix3d quat2SO3(const Vector4d& q) {
+  Quaterniond quat(q(0), q(1), q(2), q(3));
+  return quat.normalized().toRotationMatrix();
+}
+
 Matrix3d quat2SO3(const Quaterniond& q) {
   return q.normalized().toRotationMatrix();
 }

@@ -234,6 +234,7 @@ Matrix3d aa2mat(const double theta, const Vector3d& n);
 // q: 4x1
 void aa2quat(const double theta, const Vector3d& n, Vector4d& q);
 Vector4d aa2quat(const double theta, const Vector3d& n);
+Matrix3d quat2SO3(const Vector4d& q);
 Matrix3d quat2SO3(const Quaterniond& q);
 Matrix3d quat2SO3(double qw, double qx, double qy, double qz);
 // quaternion to axis-angle
