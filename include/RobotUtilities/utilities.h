@@ -18,6 +18,9 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
+// YAML
+#include <yaml-cpp/yaml.h>
+
 namespace RUT {
 /////////////////////////////////////////////////////////////////////////
 //                   types and static variables
@@ -53,6 +56,20 @@ void stream_array_in(std::ostream& st, int* array, int length);
 void stream_array_in(std::ostream& st, const std::vector<double>& vec,
                      int length);
 void stream_array_in(std::ostream& st, const VectorXd& vec, int length);
+
+/////////////////////////////////////////////////////////////////////////
+//                          yaml
+/////////////////////////////////////////////////////////////////////////
+
+Eigen::MatrixXd deserialize_matrix(const YAML::Node& node);
+template <typename T>
+T deserialize_vector(const YAML::Node& node) {
+  if (!node.IsSequence()) {
+    throw std::invalid_argument("node must be a sequence.");
+  }
+  std::vector<double> q = node.as<std::vector<double>>();
+  return Eigen::Map<T, Eigen::Unaligned>(q.data(), q.size());
+}
 
 /////////////////////////////////////////////////////////////////////////
 //                          scalar

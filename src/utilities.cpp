@@ -51,6 +51,26 @@ void stream_array_in(std::ostream& st, const Eigen::VectorXd& vec, int length) {
     st << vec[i] << "\t";
   }
 }
+/////////////////////////////////////////////////////////////////////////
+//                          Yaml
+/////////////////////////////////////////////////////////////////////////
+Eigen::MatrixXd deserialize_matrix(const YAML::Node& node) {
+  if (!node.IsSequence()) {
+    throw std::invalid_argument("node must be a sequence.");
+  }
+  if (!node[0].IsSequence()) {
+    throw std::invalid_argument("node must be a sequence of sequences.");
+  }
+  int nr = node.size();
+  int nc = node[0].size();
+  Eigen::MatrixXd mat = Eigen::MatrixXd::Zero(nr, nc);
+  for (int r = 0; r < nr; ++r) {
+    for (int c = 0; c < nc; ++c) {
+      mat(r, c) = node[r][c].as<double>();
+    }
+  }
+  return mat;
+}
 
 /////////////////////////////////////////////////////////////////////////
 //                          scalar

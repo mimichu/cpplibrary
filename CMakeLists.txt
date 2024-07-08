@@ -10,6 +10,8 @@ include_directories(include/)
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+find_library(YAMLLib yaml-cpp HINTS /usr/local/lib)
+
 ###########
 ## Build ##
 ###########
@@ -20,6 +22,7 @@ add_library(TimerLinux SHARED
 add_library(Utilities SHARED
 	src/utilities.cpp
 )
+target_link_libraries(Utilities ${YAMLLib})
 
 add_executable(test_utilities src/test.cpp)
 target_link_libraries(test_utilities TimerLinux Utilities)

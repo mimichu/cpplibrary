@@ -1,7 +1,9 @@
 # cpplibrary
 Collection of utilities for c++.
 
-Prerequists: Eigen
+Dependencies:
+* [[Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page)]
+* [[yaml-cpp](https://github.com/jbeder/yaml-cpp)]
 
 # Install
 ```
