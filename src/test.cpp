@@ -1,7 +1,7 @@
 #include <Eigen/Geometry>
 
-#include "RobotUtilities/TimerLinux.h"
-#include "RobotUtilities/utilities.h"
+#include "RobotUtilities/spatial_utilities.h"
+#include "RobotUtilities/timer_linux.h"
 
 using namespace RUT;
 

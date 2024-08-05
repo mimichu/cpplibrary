@@ -5,7 +5,6 @@ set(CMAKE_BUILD_TYPE Release)
 add_compile_options(-std=c++11)
 
 include_directories(include/)
-# include_directories("${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}")
 
 find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
@@ -15,17 +14,14 @@ find_library(YAMLLib yaml-cpp HINTS /usr/local/lib)
 ###########
 ## Build ##
 ###########
-add_library(TimerLinux SHARED
-	src/TimerLinux.cpp
-)
-
 add_library(Utilities SHARED
-	src/utilities.cpp
+	src/spatial_utilities.cpp
+	src/timer_linux.cpp
 )
 target_link_libraries(Utilities ${YAMLLib})
 
 add_executable(test_utilities src/test.cpp)
-target_link_libraries(test_utilities TimerLinux Utilities)
+target_link_libraries(test_utilities Utilities)
 
 #############
 ## Install ##
@@ -37,6 +33,6 @@ install(DIRECTORY include/
     )
 
 # binaries
-install(TARGETS TimerLinux Utilities
+install(TARGETS Utilities
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/${PROJECT_NAME}/
     )

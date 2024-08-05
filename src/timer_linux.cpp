@@ -1,4 +1,4 @@
-#include "RobotUtilities/TimerLinux.h"
+#include "RobotUtilities/timer_linux.h"
 
 #include <iostream>
 #include <thread>
@@ -13,14 +13,18 @@ Timer::Timer() {
 
 Timer::~Timer() {}
 
-TimePoint Timer::now() { return Clock::now(); }
+TimePoint Timer::now() {
+  return Clock::now();
+}
 
 TimePoint Timer::tic() {
   _t1 = Clock::now();
   return _t1;
 }
 
-void Timer::tic(const TimePoint& time_point) { _t1 = time_point; }
+void Timer::tic(const TimePoint& time_point) {
+  _t1 = time_point;
+}
 
 double Timer::toc_ms() {
   _t2 = Clock::now();
