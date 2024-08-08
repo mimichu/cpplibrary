@@ -39,9 +39,6 @@ bool Timer::set_loop_rate_hz(double hz) {
     return false;
   }
   _loop_duration_s = std::chrono::duration<double>{1. / hz};
-  std::cout << "[Timer] debug duration set: " << _loop_duration_s.count()
-            << std::endl;
-
   return true;
 }
 
