@@ -38,11 +38,14 @@ class DataBufferBase {
     _buffer.pop_front();
     return result;
   }
+
   void remove_last_k(int k) {
     for (int i = 0; i < k; i++) {
       _buffer.pop_back();
     }
   }
+
+  void clear() { _buffer.clear(); }
 
   void put(const T& data) {
     if ((_buffer_size > 0) && (_buffer.size() >= _buffer_size)) {
