@@ -228,6 +228,7 @@ int nullSpace(MatrixXd* A, MatrixXd* nullA, double TOL = 1e-9);
 
 Matrix3d wedge(const Vector3d& v);
 Matrix4d wedge6(const Vector6d& t);
+void wedge6(const Vector6d& t, Matrix4d& t_wedge);
 /**
    * wedge(v) * p = A(p) * v
    *
@@ -262,7 +263,10 @@ Matrix3d quat2SO3(double qw, double qx, double qy, double qz);
 void quat2aa(const Vector4d& q, Vector3d& aa);
 Matrix3d so32SO3(const Vector3d& v);
 Vector3d SO32so3(const Matrix3d& R);
+void SO32so3(const Matrix3d& R, double* so3);
 void so32quat(const Vector3d& so3, double* q);
+void so32quat(const Vector3d& so3, Vector4d& q);
+void so32quat(const double* so3, Eigen::Ref<RUT::Vector4d> q);
 void SO32quat(const Matrix3d& SO3, Eigen::Ref<RUT::Vector4d> q);
 void SO32quat(const Matrix3d& SO3, double* q);
 Matrix4d pose2SE3(const double* pose);

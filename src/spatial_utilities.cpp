@@ -432,6 +432,11 @@ Matrix4d wedge6(const Vector6d& t) {
   return t_wedge;
 }
 
+void wedge6(const Vector6d& t, Matrix4d& t_wedge) {
+  t_wedge << 0, -t(5), t(4), t(0), t(5), 0, -t(3), t(1), -t(4), t(3), 0, t(2),
+      0, 0, 0, 0;
+}
+
 MatrixXd wedgeRight6(const Vector4d& p) {
   MatrixXd wl(4, 6);
   double p1 = p(0);
@@ -569,6 +574,24 @@ Vector3d SO32so3(const Matrix3d& R) {
   return so3;
 }
 
+void SO32so3(const Matrix3d& R, double* so3) {
+  double temp_arg_to_cos = (R.trace() - 1.0) / 2.0;
+  truncate(&temp_arg_to_cos, -1.0, 1.0);
+  double theta = acos(temp_arg_to_cos);
+  if (fabs(theta) < kEpsilon) {
+    so3[0] = 1.0;
+    so3[1] = 0.0;
+    so3[2] = 0.0;
+  } else {
+    so3[0] = (R(2, 1) - R(1, 2)) / (2.0 * sin(theta));
+    so3[1] = (R(0, 2) - R(2, 0)) / (2.0 * sin(theta));
+    so3[2] = (R(1, 0) - R(0, 1)) / (2.0 * sin(theta));
+  }
+  so3[0] *= theta;
+  so3[1] *= theta;
+  so3[2] *= theta;
+}
+
 void so32quat(const Vector3d& so3, double* q) {
   double theta = so3.norm();
   if (theta < kEpsilon) {
@@ -586,7 +609,45 @@ void so32quat(const Vector3d& so3, double* q) {
   }
 }
 
+void so32quat(const Vector3d& so3, Vector4d& q) {
+  double theta = so3.norm();
+  if (theta < kEpsilon) {
+    q[0] = 1;
+    q[1] = 0;
+    q[2] = 0;
+    q[3] = 0;
+  } else {
+    // q = [cos(theta/2); sin(theta/2)*so3/theta];
+    double sin_theta = sin(theta / 2.0) / theta;
+    q[0] = cos(theta / 2.0);
+    q[1] = so3(0) * sin_theta;
+    q[2] = so3(1) * sin_theta;
+    q[3] = so3(2) * sin_theta;
+  }
+}
+
+void so32quat(const double* so3, Eigen::Ref<RUT::Vector4d> q) {
+  double theta = sqrt(so3[0] * so3[0] + so3[1] * so3[1] + so3[2] * so3[2]);
+  if (theta < kEpsilon) {
+    q[0] = 1;
+    q[1] = 0;
+    q[2] = 0;
+    q[3] = 0;
+  } else {
+    // q = [cos(theta/2); sin(theta/2)*so3/theta];
+    double sin_theta = sin(theta / 2.0) / theta;
+    q[0] = cos(theta / 2.0);
+    q[1] = so3[0] * sin_theta;
+    q[2] = so3[1] * sin_theta;
+    q[3] = so3[2] * sin_theta;
+  }
+}
+
 void SO32quat(const Matrix3d& SO3, Eigen::Ref<RUT::Vector4d> q) {
+  // double so3[3];
+  // SO32so3(SO3, so3);
+  // so32quat(so3, q);
+
   // Eigen implementation assumes input matrix is strictly orthogonal and is not
   // numerically stable sometimes.
   Quaterniond q_eigen(SO3);

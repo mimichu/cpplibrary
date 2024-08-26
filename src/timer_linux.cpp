@@ -54,4 +54,69 @@ bool Timer::sleep_till_next() {
   return true;
 }
 
+double Timer::check_for_overrun_ms(bool accumulative) {
+  _next_loop_start_t +=
+      std::chrono::duration_cast<std::chrono::nanoseconds>(_loop_duration_s);
+  double overrun = double(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                              Clock::now() - _next_loop_start_t)
+                              .count()) /
+                   1e6;
+  if ((overrun > 0) && !accumulative) {
+    _next_loop_start_t = Clock::now();
+  }
+  return overrun;
+}
+
+Profiler::Profiler() {
+  _running = false;
+}
+Profiler::~Profiler() {}
+
+void Profiler::start() {
+  if (_running) {
+    std::cerr << "[Profiler] Error: profiler is already running." << std::endl;
+    return;
+  }
+  _t0 = Clock::now();
+  _running = true;
+}
+
+void Profiler::stop(std::string name) {
+  if (!_running) {
+    std::cerr << "[Profiler] Error: profiler is not running." << std::endl;
+    return;
+  }
+  double duration = double(std::chrono::duration_cast<std::chrono::nanoseconds>(
+                               Clock::now() - _t0)
+                               .count()) /
+                    1e6;  // milli second
+  if (name.empty()) {
+    name = "default";
+  }
+  if (_logs.find(name) != _logs.end()) {
+    // name already exists
+    _logs[name] += duration;
+  } else {
+    _logs[name] = duration;
+  }
+  _running = false;
+}
+
+void Profiler::clear() {
+  _logs.clear();
+}
+
+void Profiler::show() {
+  if (_logs.empty()) {
+    std::cout << "[Profiler] No logs to show." << std::endl;
+    return;
+  }
+  std::cout << "==================== Profiler ===================="
+            << std::endl;
+  for (const auto& log : _logs) {
+    std::cout << log.first << ": " << log.second << " ms" << std::endl;
+  }
+  std::cout << "=================================================" << std::endl;
+}
+
 }  // namespace RUT

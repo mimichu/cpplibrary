@@ -3,6 +3,8 @@
 
 #include <chrono>
 #include <cstdlib>
+#include <string>
+#include <unordered_map>
 
 namespace RUT {
 
@@ -34,12 +36,30 @@ class Timer {
   bool set_loop_rate_hz(double hz);
   bool start_timed_loop();
   bool sleep_till_next();
+  // won't sleep, only check if the loop rate is not met
+  double check_for_overrun_ms(bool accumulative);
 
  private:
   TimePoint _t1;
   TimePoint _t2;
   TimePoint _next_loop_start_t;
   std::chrono::duration<double> _loop_duration_s;
+};
+
+class Profiler {
+ public:
+  Profiler();
+  ~Profiler();
+
+  void start();
+  void stop(std::string name = "");
+  void clear();
+  void show();
+
+ private:
+  bool _running{false};
+  TimePoint _t0;
+  std::unordered_map<std::string, double> _logs;
 };
 
 }  // namespace RUT
