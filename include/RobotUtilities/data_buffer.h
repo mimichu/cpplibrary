@@ -70,13 +70,13 @@ class DataBufferBase {
   std::string _buffer_name;  ///< The name of the buffer.
 };
 
-// Primary template, which works for Eigen::MatrixXd
+// Primary template, which works for Eigen::MatrixXd, Eigen::MatrixXf, etc.
 template <class T>
 class DataBuffer : public DataBufferBase<T> {
  public:
-  const Eigen::MatrixXd get_last_k(int k) {
+  const T get_last_k(int k) {
     assert(this->_buffer.size() >= k);
-    Eigen::MatrixXd result(this->_nrows, this->_ncols * k);
+    T result(this->_nrows, this->_ncols * k);
     int start_id = this->_buffer_size - k;
     for (int i = 0; i < k; i++) {
       result.block(0, i * this->_ncols, this->_nrows, this->_ncols) =
