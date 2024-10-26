@@ -17,6 +17,7 @@ find_library(YAMLLib yaml-cpp HINTS /usr/local/lib)
 add_library(Utilities SHARED
 	src/spatial_utilities.cpp
 	src/timer_linux.cpp
+    src/butterworth.cpp
 )
 target_link_libraries(Utilities ${YAMLLib})
 

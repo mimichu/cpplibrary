@@ -1,11 +1,30 @@
 #include <Eigen/Geometry>
 
+#include "RobotUtilities/butterworth.h"
 #include "RobotUtilities/spatial_utilities.h"
 #include "RobotUtilities/timer_linux.h"
 
 using namespace RUT;
 
 int main() {
+
+  // create a butterworth filter with cutoff frequency of 50 rad/s
+  // and sampling time of 1/200 s
+  // und 2 input channels filtered in parallel
+  butter::Butterworth filter{50, 1.0 / 200, 4, 2};
+
+  for (int i = 0; i < 100; i++) {
+    // apply input to filter
+    std::vector<double> u{4, 3};
+
+    // receive output
+    std::vector<double> y = filter.step(u);
+
+    // print output
+    std::cout << y[0] << ", " << y[1] << "\n";
+  }
+  return 0;
+
   Matrix3d rotation = rotX(0.6) * rotY(0.3) * rotZ(0.2);
   Vector3d translation;
   translation << 1, 2, 3;
