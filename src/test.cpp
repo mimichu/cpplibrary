@@ -11,19 +11,19 @@ int main() {
   // create a butterworth filter with cutoff frequency of 50 rad/s
   // and sampling time of 1/200 s
   // und 2 input channels filtered in parallel
-  butter::Butterworth filter{50, 1.0 / 200, 4, 2};
+  Butterworth filter{50, 1.0 / 200, 4, 2};
+  Butterworth filter_eigen{50, 1.0 / 200, 4, 2};
+  std::vector<double> u{4, 3};
+  Eigen::Vector2d u_eigen;
+  u_eigen << 4, 3;
 
   for (int i = 0; i < 100; i++) {
-    // apply input to filter
-    std::vector<double> u{4, 3};
-
-    // receive output
     std::vector<double> y = filter.step(u);
-
+    Eigen::VectorXd y_eigen = filter_eigen.step(u_eigen);
     // print output
-    std::cout << y[0] << ", " << y[1] << "\n";
+    std::cout << y[0] << ", " << y[1] << "," << y_eigen[0] << ", " << y_eigen[1]
+              << std::endl;
   }
-  return 0;
 
   Matrix3d rotation = rotX(0.6) * rotY(0.3) * rotZ(0.2);
   Vector3d translation;

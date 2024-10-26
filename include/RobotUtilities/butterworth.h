@@ -15,7 +15,7 @@
 #include <eigen3/Eigen/Dense>
 #include <vector>
 
-namespace butter {
+namespace RUT {
 /**
    * @brief Struct to represent continuous state space model.
    *
@@ -51,6 +51,12 @@ class Butterworth {
      * @return std::vector<double> Ouput of filter
      */
   std::vector<double> step(const std::vector<double>& u);
+
+  /**
+   * @brief Apply input to filter and receive output
+   *        Overload for eigen types
+   */
+  Eigen::VectorXd step(const Eigen::VectorXd& u);
 
  private:
   /**
@@ -95,6 +101,6 @@ class Butterworth {
   Eigen::MatrixXd expm(Eigen::MatrixXd A);
 };
 
-}  // namespace butter
+}  // namespace RUT
 
 #endif

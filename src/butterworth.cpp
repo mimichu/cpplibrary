@@ -16,7 +16,7 @@
 
 #include "RobotUtilities/butterworth.h"
 
-namespace butter {
+namespace RUT {
 Butterworth::Butterworth(double wc, double dt, int n, int size) {
   // calculate the a coefficients
   Eigen::VectorXd a_coeff = Butterworth::calculate_a_coeff(wc, n);
@@ -118,6 +118,12 @@ std::vector<double> Butterworth::step(const std::vector<double>& u) {
   return y;
 }
 
+Eigen::VectorXd Butterworth::step(const Eigen::VectorXd& u) {
+  // apply the input
+  state_x = discrete_sys.Ad * state_x + discrete_sys.Bd * u.transpose();
+  return (discrete_sys.Cd * state_x).transpose();
+}
+
 Eigen::MatrixXd Butterworth::expm(Eigen::MatrixXd A) {
   int n = A.cols();
 
@@ -130,4 +136,4 @@ Eigen::MatrixXd Butterworth::expm(Eigen::MatrixXd A) {
 
   return expA_k;
 }
-}  // namespace butter
+}  // namespace RUT
