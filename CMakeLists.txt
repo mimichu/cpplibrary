@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 project(RobotUtilities)
 set(CMAKE_BUILD_TYPE Release)
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++17)
 
 include_directories(include/)
 
-find_package(Eigen3 REQUIRED)
+find_package(Eigen3 3.4 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
 find_library(YAMLLib yaml-cpp HINTS /usr/local/lib)
