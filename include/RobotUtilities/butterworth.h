@@ -11,8 +11,8 @@
 #ifndef BUTTERWORTH_H
 #define BUTTERWORTH_H
 
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Dense>
+#include <Eigen/Core>
+#include <Eigen/Dense>
 #include <vector>
 
 namespace RUT {
